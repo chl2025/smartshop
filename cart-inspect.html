@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>IndexedDB Cart Inspector</title>
+  <link rel="stylesheet" href="css/bootstrap.min.css" />
+  <style>
+    body { padding: 2rem; }
+    pre { background: #f8f9fa; padding: 1rem; border-radius: 5px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="mb-4">IndexedDB Cart Inspector</h1>
+    <div id="db-list"></div>
+    <div id="store-list"></div>
+    <div class="mb-3">
+      <label for="storeSelect" class="form-label">Select Object Store:</label>
+      <select id="storeSelect" class="form-select mb-2"></select>
+      <button id="clearStoreBtn" class="btn btn-danger">Clear Selected Store</button>
+      <button id="refreshStoreBtn" class="btn btn-primary ms-2">Refresh Store Data</button>
+    </div>
+    <div id="object-list"></div>
+  </div>
+  <script>
+    let currentDb = null;
+
+    function showError(msg) {
+      document.getElementById('db-list').innerHTML = `<div class="alert alert-danger">${msg}</div>`;
+    }
+
+    function listObjectStores(db) {
+      const storeList = document.getElementById('store-list');
+      storeList.innerHTML = "<h3>Object Stores</h3>";
+      const storeSelect = document.getElementById('storeSelect');
+      storeSelect.innerHTML = "";
+      if (db.objectStoreNames.length === 0) {
+        storeList.innerHTML += "<p>No object stores found.</p>";
+        storeSelect.innerHTML = "<option value=''>No stores</option>";
+        return;
+      }
+      const ul = document.createElement('ul');
+      ul.className = "list-group mb-4";
+      for (let i = 0; i < db.objectStoreNames.length; i++) {
+        const storeName = db.objectStoreNames[i];
+        const li = document.createElement('li');
+        li.className = "list-group-item";
+        li.textContent = storeName;
+        ul.appendChild(li);
+
+        // Add to select
+        const option = document.createElement('option');
+        option.value = storeName;
+        option.textContent = storeName;
+        storeSelect.appendChild(option);
+      }
+      storeList.appendChild(ul);
+    }
+
+    function listObjects(db) {
+      const objectList = document.getElementById('object-list');
+      objectList.innerHTML = "<h3>Objects in Stores</h3>";
+      if (db.objectStoreNames.length === 0) {
+        objectList.innerHTML += "<p>No object stores to inspect.</p>";
+        return;
+      }
+      for (let i = 0; i < db.objectStoreNames.length; i++) {
+        const storeName = db.objectStoreNames[i];
+        const transaction = db.transaction([storeName], "readonly");
+        const store = transaction.objectStore(storeName);
+        const request = store.getAll();
+        request.onsuccess = function (event) {
+          const items = event.target.result;
+          objectList.innerHTML += `<h5>${storeName}</h5>`;
+          if (items.length === 0) {
+            objectList.innerHTML += "<p><em>No objects found.</em></p>";
+          } else {
+            objectList.innerHTML += `<pre>${JSON.stringify(items, null, 2)}</pre>`;
+          }
+        };
+        request.onerror = function () {
+          objectList.innerHTML += `<p class="text-danger">Failed to read from store: ${storeName}</p>`;
+        };
+      }
+    }
+
+    function clearStore(storeName) {
+      if (!currentDb || !storeName) return;
+      const transaction = currentDb.transaction([storeName], "readwrite");
+      const store = transaction.objectStore(storeName);
+      const clearRequest = store.clear();
+      clearRequest.onsuccess = function () {
+        listObjects(currentDb);
+        alert(`Cleared all records from store: ${storeName}`);
+      };
+      clearRequest.onerror = function () {
+        alert(`Failed to clear store: ${storeName}`);
+      };
+    }
+
+    function listObjectsOfStore(db, storeName) {
+      const objectList = document.getElementById('object-list');
+      objectList.innerHTML = `<h3>Objects in Store: ${storeName}</h3>`;
+      if (!storeName) {
+        objectList.innerHTML += "<p>No object store selected.</p>";
+        return;
+      }
+      const transaction = db.transaction([storeName], "readonly");
+      const store = transaction.objectStore(storeName);
+      const request = store.getAll();
+      request.onsuccess = function (event) {
+        const items = event.target.result;
+        if (items.length === 0) {
+          objectList.innerHTML += "<p><em>No objects found.</em></p>";
+        } else {
+          objectList.innerHTML += `<pre>${JSON.stringify(items, null, 2)}</pre>`;
+        }
+      };
+      request.onerror = function () {
+        objectList.innerHTML += `<p class="text-danger">Failed to read from store: ${storeName}</p>`;
+      };
+    }
+
+    window.onload = function () {
+      const dbName = "cartDB";
+      const dbList = document.getElementById('db-list');
+      dbList.innerHTML = `<h2>Database: <code>${dbName}</code></h2>`;
+      const request = indexedDB.open(dbName);
+
+      request.onerror = function () {
+        showError("Failed to open IndexedDB.");
+      };
+
+      request.onsuccess = function (event) {
+        const db = event.target.result;
+        currentDb = db;
+        listObjectStores(db);
+        listObjects(db);
+
+        document.getElementById('clearStoreBtn').onclick = function () {
+          const storeName = document.getElementById('storeSelect').value;
+          if (storeName) {
+            if (confirm(`Are you sure you want to clear all records from "${storeName}"?`)) {
+              clearStore(storeName);
+            }
+          }
+        };
+
+        document.getElementById('refreshStoreBtn').onclick = function () {
+          const storeName = document.getElementById('storeSelect').value;
+          if (storeName) {
+            listObjectsOfStore(currentDb, storeName);
+          }
+        };
+
+        document.getElementById('storeSelect').onchange = function () {
+          const storeName = this.value;
+          if (storeName) {
+            listObjectsOfStore(currentDb, storeName);
+          }
+        };
+      };
+    };
+  </script>
+</body>
+</html>

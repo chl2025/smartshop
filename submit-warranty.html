@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta
+      http-equiv="X-UA-Compatible"
+      content="ie=edge"
+    />
+    <title>Smart Shop</title>
+
+    <link
+      href="//fonts.googleapis.com/css?family=Righteous"
+      rel="stylesheet"
+    />
+    <link
+      href="//fonts.googleapis.com/css?family=Open+Sans+Condensed:300,300i,700"
+      rel="stylesheet"
+    />
+    <link
+      href="//fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i"
+      rel="stylesheet"
+    />
+
+    <link
+      rel="stylesheet"
+      href="css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="css/style.css"
+    />
+    <link
+      rel="stylesheet"
+      href="css/main-products.css"
+    />
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div class="row min-vh-100">
+        <div
+          id="myheader"
+          class="fixed-top col-12"
+        >
+          <!-- myheader.sect is loaded here -->
+        </div>
+
+        <div class="content-wrapper">
+          <!-- Main Content, put your context within <main> -->
+          <main
+            style="
+              max-width: 700px;
+              margin: 40px auto;
+              background-color: white;
+              padding: 30px;
+              box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            "
+          >
+            <h1 style="color: #003366">Warranty Return Submitted ✅</h1>
+            <p style="font-size: 16px">
+              Thank you for submitting your warranty return request. Below are
+              the details we received:
+            </p>
+
+            <div style="margin-top: 20px">
+              <p style="font-size: 16px">
+                <strong style="color: #0055aa">Full Name:</strong>
+                <span id="name"></span>
+              </p>
+              <p style="font-size: 16px">
+                <strong style="color: #0055aa">Email Address:</strong>
+                <span id="email"></span>
+              </p>
+              <p style="font-size: 16px">
+                <strong style="color: #0055aa">Order Number:</strong>
+                <span id="order"></span>
+              </p>
+              <p style="font-size: 16px">
+                <strong style="color: #0055aa">Product Name:</strong>
+                <span id="product"></span>
+              </p>
+              <p style="font-size: 16px">
+                <strong style="color: #0055aa">Issue Description:</strong>
+                <span id="issue"></span>
+              </p>
+              <p style="font-size: 16px">
+                <strong style="color: #0055aa">Preferred Return Method:</strong>
+                <span id="return-method"></span>
+              </p>
+            </div>
+
+            <p style="font-size: 16px">
+              Our support team will contact you within 3 business days to
+              arrange the next steps.
+            </p>
+          </main>
+          <!-- End of Main Content -->
+        </div>
+
+        <div
+          id="myfooter"
+          class="col-12 align-self-end"
+        >
+          <!-- myfooter.sect is loaded here-->
+        </div>
+      </div>
+    </div>
+
+    <script
+      type="text/javascript"
+      src="js/jquery.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="js/bootstrap.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="js/script.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="js/myscript.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="js/myscript-cart.js"
+    ></script>
+    <script>
+      // Parse query parameters from the URL
+      const params = new URLSearchParams(window.location.search);
+
+      // Inject values into the page
+      ["name", "email", "order", "product", "issue", "return-method"].forEach(
+        (key) => {
+          const el = document.getElementById(key);
+          if (el) {
+            el.textContent = params.get(key) || "Not provided";
+          }
+        }
+      );
+    </script>
+  </body>
+</html>

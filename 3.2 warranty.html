@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta
+      http-equiv="X-UA-Compatible"
+      content="ie=edge"
+    />
+    <title>Smart Shop</title>
+
+    <link
+      href="//fonts.googleapis.com/css?family=Righteous"
+      rel="stylesheet"
+    />
+    <link
+      href="//fonts.googleapis.com/css?family=Open+Sans+Condensed:300,300i,700"
+      rel="stylesheet"
+    />
+    <link
+      href="//fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i"
+      rel="stylesheet"
+    />
+
+    <link
+      rel="stylesheet"
+      href="css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="css/style.css"
+    />
+    <link
+      rel="stylesheet"
+      href="css/main-products.css"
+    />
+    <style>
+      .is-invalid {
+        border-color: #dc3545;
+        box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div class="row min-vh-100">
+        <div
+          id="myheader"
+          class="fixed-top col-12"
+        >
+          <!-- myheader.sect is loaded here -->
+        </div>
+
+        <div class="content-wrapper">
+          <main class="row">
+            <div class="col-12 mt-3 text-center">
+              <h1>Warranty Return Request</h1>
+            </div>
+            <p
+              style="
+                font-size: larger;
+                max-width: 70%;
+                margin: 0 auto;
+                margin-bottom: 20px;
+              "
+            >
+              If you have purchased a product from Smart Shop and need to
+              initiate a warranty return, please fill out the form below. Our
+              support team will review your request and contact you within 3
+              business days.
+            </p>
+            <div class="col-lg-4 col-md-6 col-sm-8 mx-auto bg-white py-3 mb-4">
+              <form
+                action="submit-warranty.html"
+                method="GET"
+              >
+                <div class="mb-3">
+                  <label
+                    class="form-label"
+                    for="name"
+                    >Full Name</label
+                  >
+                  <input
+                    class="form-control"
+                    type="text"
+                    id="name"
+                    name="name"
+                    required
+                  />
+                </div>
+                <div class="mb-3">
+                  <label
+                    class="form-label"
+                    for="email"
+                    >Email Address</label
+                  >
+                  <input
+                    class="form-control"
+                    type="email"
+                    id="email"
+                    name="email"
+                    required
+                  />
+                </div>
+                <div class="mb-3">
+                  <label
+                    class="form-label"
+                    for="order"
+                    >Order Number</label
+                  >
+                  <input
+                    class="form-control"
+                    type="text"
+                    id="order"
+                    name="order"
+                    required
+                  />
+                </div>
+                <div class="mb-3">
+                  <label
+                    class="form-label"
+                    for="product"
+                    >Product Name</label
+                  >
+                  <input
+                    class="form-control"
+                    type="text"
+                    id="product"
+                    name="product"
+                    required
+                  />
+                </div>
+                <div class="mb-3">
+                  <label
+                    class="form-label"
+                    for="issue"
+                    >Issue Description</label
+                  >
+                  <textarea
+                    class="form-control"
+                    id="issue"
+                    name="issue"
+                    rows="5"
+                    required
+                  ></textarea>
+                </div>
+                <div class="mb-3">
+                  <label
+                    class="form-label"
+                    for="return-method"
+                    >Preferred Return Method</label
+                  >
+                  <select
+                    class="form-control"
+                    id="return-method"
+                    name="return-method"
+                  >
+                    <option
+                      value=""
+                      disabled
+                      selected
+                    >
+                      Please select
+                    </option>
+                    <option value="Pickup from address">
+                      Pickup from address
+                    </option>
+                    <option value="Drop off at store">Drop off at store</option>
+                  </select>
+                </div>
+                <button type="submit">Submit Request</button>
+                <br />
+              </form>
+            </div>
+          </main>
+          <!-- End of Main Content -->
+        </div>
+
+        <div
+          id="myfooter"
+          class="col-12 align-self-end"
+        >
+          <!-- myfooter.sect is loaded here-->
+        </div>
+      </div>
+    </div>
+
+    <script
+      type="text/javascript"
+      src="js/jquery.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="js/bootstrap.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="js/script.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="js/myscript.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="js/myscript-cart.js"
+    ></script>
+    <script>
+      document.querySelector("form").addEventListener("submit", function (e) {
+        const selectBox = document.getElementById("return-method");
+        if (!selectBox.value) {
+          e.preventDefault(); // Cancel form submission
+          selectBox.classList.add("is-invalid"); // Highlight the box
+        } else {
+          selectBox.classList.remove("is-invalid"); // Remove highlight if valid
+        }
+      });
+    </script>
+  </body>
+</html>
